@@ -1,0 +1,145 @@
+package ExaBarco.model;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+import ExaBarco.utils.UtilsBD;
+
+public class BarcoDAO {
+
+    // Método para verificar si un ID de barco ya existe
+    private boolean idExiste(int id) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM barcos WHERE id = ?";
+        try (Connection con = UtilsBD.conectarBD();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Método para agregar un Barco
+    public void insertarBarcos(BarcoDO barco) throws SQLException {
+        if (idExiste(barco.getId())) {
+            throw new SQLException("El ID del barco ya existe.");
+        }
+        
+        String sql = "INSERT INTO barcos (id, nombre, descripcion, categoria, eslora, competicion, precio, peso) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection con = UtilsBD.conectarBD();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, barco.getId());
+            stmt.setString(2, barco.getNombre());
+            stmt.setString(3, barco.getDescripcion());
+            stmt.setInt(4, barco.getCategoria());
+            stmt.setInt(5, barco.getEslora());
+            stmt.setInt(6, barco.getCompeticion());
+            stmt.setInt(7, barco.getPrecio());
+            stmt.setInt(8, barco.getPeso());
+            stmt.executeUpdate();
+        }
+    }
+
+    public static void agregarBarcos(Scanner scanner, BarcoDAO barcoDAO) {
+        try {
+            System.out.println("Ingrese el ID del barco:");
+            int id = scanner.nextInt();
+            scanner.nextLine(); 
+
+            System.out.println("Ingrese el nombre del barco:");
+            String nombre = scanner.nextLine();
+
+            System.out.println("Ingrese la descripcion del barco:");
+            String descripcion = scanner.nextLine();
+
+            System.out.println("Ingrese la categoria del barco:");
+            int categoria = scanner.nextInt();
+
+            System.out.println("Ingrese la eslora del barco:");
+            int eslora = scanner.nextInt();
+
+            System.out.println("Ingrese la competicion en la que se encuentra el barco:");
+            int competicion = scanner.nextInt();
+
+            System.out.println("Ingrese el precio del barco:");
+            int precio = scanner.nextInt();
+
+            System.out.println("Ingrese el peso del barco:");
+            int peso = scanner.nextInt();
+
+            BarcoDO nuevoBarco = new BarcoDO(id, nombre, descripcion, categoria, eslora, competicion, precio, peso);
+            barcoDAO.insertarBarcos(nuevoBarco);
+
+            System.out.println("¡Barco agregado exitosamente!");
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Entrada no válida. Por favor, inténtelo de nuevo.");
+            scanner.nextLine();
+        }
+    }
+
+    public static void eliminarBarcoPorId(Scanner scanner) throws SQLException {
+        try {
+            System.out.println("Ingrese el ID del barco que desea eliminar:");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            String sql = "DELETE FROM barcos WHERE id = ?";
+            try (Connection con = UtilsBD.conectarBD();
+                 PreparedStatement stmt = con.prepareStatement(sql)) {
+                stmt.setInt(1, id);
+                int filasAfectadas = stmt.executeUpdate();
+                if (filasAfectadas > 0) {
+                    System.out.println("Barco eliminado correctamente.");
+                } else {
+                    System.out.println("No se encontró ningún barco con el ID especificado.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al intentar eliminar el barco. Por favor, inténtelo de nuevo.");
+            e.printStackTrace();
+        }
+    }
+    
+ // Método para mostrar todos los barcos ordenados por un campo especificado
+    public void mostrarBarcosPorCampo(String campo) throws SQLException {
+        String sql = "SELECT * FROM barcos ORDER BY " + campo;
+        try (Connection con = UtilsBD.conectarBD();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            List<BarcoDO> barcos = new ArrayList<>();
+            while (rs.next()) {
+                BarcoDO barco = new BarcoDO();
+                barco.setId(rs.getInt("id"));
+                barco.setNombre(rs.getString("nombre"));
+                barco.setDescripcion(rs.getString("descripcion"));
+                barco.setCategoria(rs.getInt("categoria"));
+                barco.setEslora(rs.getInt("eslora"));
+                barco.setCompeticion(rs.getInt("competicion"));
+                barco.setPrecio(rs.getInt("precio"));
+                barco.setPeso(rs.getInt("peso"));
+                barcos.add(barco);
+            }
+
+            if (barcos.isEmpty()) {
+                System.out.println("No hay barcos registrados.");
+            } else {
+                for (BarcoDO barco : barcos) {
+                    System.out.println(barco);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al recuperar los barcos. Por favor, inténtelo de nuevo.");
+            e.printStackTrace();
+        }
+    }
+}
