@@ -1,0 +1,77 @@
+package ExaBarco;
+
+import java.sql.SQLException;
+import java.util.Scanner;
+import ExaBarco.model.BarcoDAO;
+
+public class MenuBarcos {
+
+    public static void main(String[] args) throws SQLException {
+        Scanner scanner = new Scanner(System.in);
+        BarcoDAO barcoDAO = new BarcoDAO();
+
+        int opcion = 0;
+        while (opcion != 4) {
+            System.out.println("**** Bienvenido a PuertoSanta ****");
+            System.out.println("**** Administración *******");
+            System.out.println("1. Insertar Barco");
+            System.out.println("2. Mostrar Barcos");
+            System.out.println("3. Eliminar Barcos");
+            System.out.println("4. Salir");
+            System.out.println("Opción (1-4):");
+            opcion = scanner.nextInt();
+            switch (opcion) {
+                case 1:
+                    // Llamamos a la función para agregar barcos
+                    barcoDAO.agregarBarcos(scanner, barcoDAO);
+                    break;
+                case 2:
+                    // Cargamos el siguiente menú
+                    int opcion1 = 0;
+                    while (opcion1 != 3) {
+                        System.out.println("1. Mostrar todos ordenados por ...");
+                        System.out.println("2. Mostrar los de eslora superior a ...");
+                        System.out.println("3. Salir");
+                        System.out.println("Opción (1-3):");
+                        opcion1 = scanner.nextInt();
+
+                        switch (opcion1) {
+                        case 1:
+                            // Solicitar campo de ordenación y mostrar barcos ordenados
+                            System.out.println("Ingrese el campo por el cual desea ordenar (id, nombre, eslora):");
+                            String campo = scanner.next();
+                            if (campo.equals("id") || campo.equals("nombre") || campo.equals("eslora")) {
+                                barcoDAO.mostrarBarcosPorCampo(campo);
+                            } else {
+                                System.out.println("Campo no válido. Por favor, ingrese 'id', 'nombre' o 'eslora'.");
+                            }
+                            break;
+
+                            case 2:
+                                // Llamamos a la función para ver los barcos con eslora superior a la que ingrese el usuario
+                                System.out.println("Opción 2");
+                                break;
+
+                            case 3:
+                                System.out.println("Saliendo del menú");
+                                break;
+                            default:
+                                System.out.println("Opción no válida. Por favor, elige una opción entre 1 y 3.");
+                                break;
+                        }
+                    }
+                    break;
+                case 3:
+                    barcoDAO.eliminarBarcoPorId(scanner);
+                    break;
+                case 4:
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, elige una opción entre 1 y 4.");
+                    break;
+            }
+        }
+        scanner.close();
+    }
+}
