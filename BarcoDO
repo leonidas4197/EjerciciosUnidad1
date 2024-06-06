@@ -1,0 +1,129 @@
+package ExaBarco.model;
+
+public class BarcoDO {
+	
+	private int id;
+	private String nombre;
+	private String descripcion;
+	private int categoria;
+	private int eslora;
+	private int competicion;
+	private int precio;
+	private int peso;
+
+	public BarcoDO() {}
+
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+		return id;
+	}
+	/**
+	 * @return the nombre
+	 */
+	public String getNombre() {
+		return nombre;
+	}
+	/**
+	 * @return the descripcion
+	 */
+	public String getDescripcion() {
+		return descripcion;
+	}
+	/**
+	 * @return the categoria
+	 */
+	public int getCategoria() {
+		return categoria;
+	}
+	/**
+	 * @return the eslora
+	 */
+	public int getEslora() {
+		return eslora;
+	}
+	/**
+	 * @return the competicion
+	 */
+	public int getCompeticion() {
+		return competicion;
+	}
+	/**
+	 * @return the precio
+	 */
+	public int getPrecio() {
+		return precio;
+	}
+	/**
+	 * @return the peso
+	 */
+	public int getPeso() {
+		return peso;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	/**
+	 * @param nombre the nombre to set
+	 */
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	/**
+	 * @param descripcion the descripcion to set
+	 */
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+	/**
+	 * @param categoria the categoria to set
+	 */
+	public void setCategoria(int categoria) {
+		this.categoria = categoria;
+	}
+	/**
+	 * @param eslora the eslora to set
+	 */
+	public void setEslora(int eslora) {
+		this.eslora = eslora;
+	}
+	/**
+	 * @param competicion the competicion to set
+	 */
+	public void setCompeticion(int competicion) {
+		this.competicion = competicion;
+	}
+	/**
+	 * @param precio the precio to set
+	 */
+	public void setPrecio(int precio) {
+		this.precio = precio;
+	}
+	/**
+	 * @param peso the peso to set
+	 */
+	public void setPeso(int peso) {
+		this.peso = peso;
+	}
+	@Override
+	public String toString() {
+		return "BarcoDO [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", categoria="
+				+ categoria + ", eslora=" + eslora + ", competicion=" + competicion + ", precio=" + precio + ", peso="
+				+ peso + "]";
+	}
+	public BarcoDO(int id, String nombre, String descripcion, int categoria, int eslora, int competicion, int precio,
+			int peso) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.categoria = categoria;
+		this.eslora = eslora;
+		this.competicion = competicion;
+		this.precio = precio;
+		this.peso = peso;
+	}
+
+
+	}
